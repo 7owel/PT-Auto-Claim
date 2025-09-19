@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+.venv/
+
+# PyInstaller
+dist/
+build/
+*.spec
+
+# Logs
+debug_log.txt

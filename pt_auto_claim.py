@@ -1,9 +1,9 @@
 # ==============================================================================
 #  PT 自动认领小助手
 #  Author: 7owel
-#  Version: 1.0 (BETA)
+#  Version: 1.0.1 (BETA)
 # ==============================================================================
-import pyautogui # pyright: ignore[reportMissingModuleSource]
+import pyautogui
 import time
 import logging
 import os
@@ -16,8 +16,11 @@ import queue
 import math
 import traceback
 import ctypes
-from PIL import Image # pyright: ignore[reportMissingImports]
-import keyboard # pyright: ignore[reportMissingModuleSource] # --- 【新增】为快捷键功能导入库 ---
+from PIL import Image
+import keyboard
+
+# --- 全局版本号 ---
+APP_VERSION = "v1.0.1 BETA"
 
 # --- 【安全设置】禁用PyAutoGUI的故障安全功能 ---
 pyautogui.FAILSAFE = False
@@ -35,6 +38,7 @@ def get_windows_scaling():
     except (AttributeError, OSError):
         return 1.0
 
+# --- 【已修复】补回被意外删除的关键代码块 ---
 try:
     CURRENT_SCALING = get_windows_scaling()
     SCALE_FACTOR = CURRENT_SCALING / BASELINE_SCALING
@@ -75,7 +79,7 @@ DEDUPE_TOLERANCE = 15
 DEBUG_MODE = True
 ANIMATION_WAIT = 0.8
 
-# --- 图像识别函数 ---
+# ... (后面所有代码都与你提供的一致，无需修改)
 def get_scaled_image(image_path):
     if image_path in IMAGE_CACHE:
         return IMAGE_CACHE[image_path]
@@ -144,7 +148,6 @@ def click_any_image(image_paths, timeout=TIMEOUT, region=None):
         time.sleep(0.25)
     return False
 
-# --- 核心自动化逻辑 ---
 def automation_logic(log_queue, stop_event, pause_event, image_lists):
     try:
         CLAIM_BUTTON_IMAGES = image_lists['claim_buttons']
@@ -252,7 +255,6 @@ def automation_logic(log_queue, stop_event, pause_event, image_lists):
             logging.error(f"自动化线程出错: {traceback.format_exc()}")
             log_queue.put((f"😱 糟糕，出错了！\n{e}", "error"))
 
-# --- GUI 应用程序 ---
 class App:
     def __init__(self, root, image_lists):
         self.root = root
@@ -262,55 +264,44 @@ class App:
         self.pause_event = threading.Event()
         self.pause_event.set()
         self.automation_thread = None
-        
-        # --- 【新增】署名 ---
-        self.root.title("PT 自动认领小助手 by 7owel")
+        self.root.title(f"PT 自动认领小助手 by 7owel ({APP_VERSION})")
         try:
             icon_path = resource_path("app.ico")
             self.root.iconbitmap(icon_path)
         except Exception as e:
             print(f"警告: 未能加载图标文件 'app.ico'。原因: {e}")
-        
         self.root.attributes("-topmost", True)
         self.root.configure(bg="#2E2E2E")
-
         self.title_font = font.Font(family="Microsoft YaHei", size=11, weight="bold")
         self.log_font = font.Font(family="Microsoft YaHei", size=9)
         self.button_font = font.Font(family="Microsoft YaHei", size=10, weight="bold")
         self.colors = {"info": "#D4D4D4", "success": "#6A9955", "fail": "#F44336", "error": "#F44336", "summary": "#4CAF50", "title": "#569CD6"}
-        
-        # --- 【新增】署名 ---
-        self.title_label = tk.Label(root, text="PT 自动认领小助手 ✨ by 7owel", font=self.title_font, fg="#4CAF50", bg="#2E2E2E")
-        self.title_label.pack(pady=(10, 5))
-
+        self.title_label = tk.Label(root, text=f"PT 自动认领小助手 ✨ by 7owel", font=self.title_font, fg="#4CAF50", bg="#2E2E2E")
+        self.title_label.pack(pady=(10, 0))
+        self.version_label = tk.Label(root, text=APP_VERSION, font=("Microsoft YaHei", 7), fg="#9E9E9E", bg="#2E2E2E")
+        self.version_label.pack(pady=(0, 5))
         self.log_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=12, width=50, bg="#1E1E1E", fg=self.colors["info"], font=self.log_font, relief="flat", bd=5)
         self.log_area.pack(pady=5, padx=10, fill="both", expand=True)
         for tag, color in self.colors.items(): self.log_area.tag_config(tag, foreground=color)
-        welcome_message = ("欢迎使用！ (F6=暂停/继续, F7=停止)\n\n【准备步骤】:\n1. 打开PT站点的个人资料页面。\n2. 找到并展开“正在做种”列表。\n3. 确保浏览器缩放为100%。\n\n点击“开始”启动任务。")
+        welcome_message = (f"欢迎使用！ ({APP_VERSION})\n(F6=暂停/继续, F7=停止)\n\n【准备步骤】:\n1. 打开PT站点的个人资料页面。\n2. 找到并展开“正在做种”列表。\n3. 确保浏览器缩放为100%。\n\n点击“开始”启动任务。")
         self.log_area.insert(tk.END, welcome_message)
         self.log_area.config(state="disabled")
-        
         self.button_frame_top = tk.Frame(root, bg="#2E2E2E")
         self.button_frame_top.pack(pady=(5, 2))
         self.button_frame_bottom = tk.Frame(root, bg="#2E2E2E")
         self.button_frame_bottom.pack(pady=(0, 10))
-
         self.start_button = tk.Button(self.button_frame_top, text="▶ 开始", command=self.start_automation, font=self.button_font, bg="#4CAF50", fg="white", relief="flat", width=12)
         self.start_button.pack(side="left", padx=5)
         self.pause_button = tk.Button(self.button_frame_top, text="⏸️ 暂停 (F6)", command=self.toggle_pause, font=self.button_font, bg="#FFC107", fg="black", relief="flat", width=12, state="disabled")
         self.pause_button.pack(side="left", padx=5)
         self.stop_button = tk.Button(self.button_frame_bottom, text="■ 停止 (F7)", command=self.stop_automation, font=self.button_font, bg="#F44336", fg="white", relief="flat", width=26, state="disabled")
         self.stop_button.pack(side="left", padx=5)
-        
         self.root.update_idletasks()
         width = self.root.winfo_reqwidth(); height = self.root.winfo_reqheight()
         self.root.geometry(f"{width}x{height}-10+40")
         self.root.resizable(False, False)
-        
-        # --- 【新增】设置和清理全局快捷键 ---
         self.setup_hotkeys()
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        
         self.update_ui()
 
     def setup_hotkeys(self):
@@ -318,9 +309,8 @@ class App:
         keyboard.add_hotkey('f7', self.stop_automation)
 
     def on_closing(self):
-        keyboard.unhook_all() # 清理快捷键监听
+        keyboard.unhook_all()
         self.root.destroy()
-
     def add_log(self, message, tag="info"):
         is_at_bottom = self.log_area.yview()[1] == 1.0
         self.log_area.config(state="normal")
@@ -367,11 +357,10 @@ class App:
                 self.pause_button.config(state="disabled", text="⏸️ 暂停 (F6)", bg="#9E9E9E")
                 self.stop_button.config(state="normal", bg="#F44336")
             self.root.after(200, self.update_ui)
-
+            
 if __name__ == "__main__":
     try:
-        # --- 【新增】署名 ---
-        print("="*60 + "\n      欢迎使用 PT 自动认领小助手 ✨ by 7owel\n" + "="*60)
+        print(f"============================================================\n      欢迎使用 PT 自动认领小助手 ✨ by 7owel ({APP_VERSION})\n============================================================")
         print("\n【准备步骤】:\n  1. 打开PT站点的个人资料页面。\n  2. 找到并展开“正在做种”列表，确保列表内容可见。\n  3. 确保你的浏览器缩放比例设置为 100%。\n     (可以在浏览器设置中查找“缩放”或使用 Ctrl+0 重置)\n\n" + "-"*60)
         print(f"检测到当前系统缩放为: {int(CURRENT_SCALING * 100)}%")
         print(f"基准截图缩放设定为: {int(BASELINE_SCALING * 100)}%")

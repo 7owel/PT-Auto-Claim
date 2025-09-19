@@ -6,7 +6,7 @@
 
 由于许多现有的自动认领的油猴脚本在PT站点兼容性不好，此项目是基于图像识别的自动化模拟点击工具。它旨在提供一个更通用、更可靠的方案来自动执行“认领”任务。
 
-![PT 自动认领小助手 GUI](https://raw.githubusercontent.com/7owel/PT-Auto-Claim/main/docs/gui-screenshot.png)
+![PT 自动认领小助手 GUI](https://raw.githubusercontent.com/7owel/PT-Auto-Claim/main/docs/gui-screenshot-1.0.1.png)
 
 ---
 

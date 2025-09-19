@@ -6,7 +6,7 @@
 
 由于许多现有的油猴脚本在各大PT站点兼容性不好，此项目时基于图像识别的自动化工具。它旨在提供一个更通用、更可靠的方案来自动执行“认领做种”任务，从而解放双手。
 
-https://github.com/7owel/PT-Auto-Claim/blob/main/docs/gui-screenshot.png
+![PT 自动认领小助手 GUI](https://raw.githubusercontent.com/7owel/PT-Auto-Claim/main/docs/gui-screenshot.png)
 
 ---
 

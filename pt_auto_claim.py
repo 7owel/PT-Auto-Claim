@@ -73,7 +73,7 @@ USE_GRAYSCALE = True
 PAGE_LOAD_WAIT = 0.5
 DEDUPE_TOLERANCE = 15
 DEBUG_MODE = True
-ANIMATION_WAIT = 0.1
+ANIMATION_WAIT = 0.8
 
 # --- 图像识别函数 ---
 def get_scaled_image(image_path):

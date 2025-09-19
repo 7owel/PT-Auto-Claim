@@ -1,15 +1,43 @@
-# Python
+# Python runtime files
 __pycache__/
 *.pyc
 
-# Virtual Environment
-venv/
-.venv/
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # PyInstaller
-dist/
-build/
+#  Usually these files are created by pyinstaller, if you run pyinstaller
+#  without leaving the main directory.
 *.spec
 
-# Logs
+# Log files
 debug_log.txt
+
+# Ignore the contents of the releases folder, but not the folder itself
+releases/*
+!releases/.gitkeep
+
+# IDE files
+.vscode/
+.idea/
+```    **这个最终版的`.gitignore`做了什么？**
+*   它包含了我们之前讨论的所有规则 (`dist/`, `build/`, `releases/*` 等）。
+*   它**明确地加入了 `*.spec`**，确保以后 `.spec` 文件再也不会出现。
+*   它还加入了一些通用的Python和IDE（如VSCode, PyCharm）的忽略规则，让你的项目更加专业。

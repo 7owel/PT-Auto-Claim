@@ -4,7 +4,7 @@
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-由于许多现有的油猴脚本在各大PT站点兼容性不好，此项目时基于图像识别的自动化工具。它旨在提供一个更通用、更可靠的方案来自动执行“认领做种”任务，从而解放双手。
+由于许多现有的自动认领的油猴脚本在PT站点兼容性不好，此项目是基于图像识别的自动化模拟点击工具。它旨在提供一个更通用、更可靠的方案来自动执行“认领”任务。
 
 ![PT 自动认领小助手 GUI](https://raw.githubusercontent.com/7owel/PT-Auto-Claim/main/docs/gui-screenshot.png)
 
@@ -53,7 +53,7 @@
     - 脚本默认启用了灰度识别 (`USE_GRAYSCALE = True`) 以提高效率和兼容性。但在某些“下一页”按钮与背景对比度极低的深色主题或夜间模式下，可能会识别失败。
 
 4.  **UI动画时序问题**:
-    - 脚本中的 `ANIMATION_WAIT` 参数（当前为0.1秒）是为了平衡UI动画响应与执行效率。在系统负载极高或浏览器响应迟缓的情况下，这个延迟可能不够长，从而导致“抢跑”或“双击”等问题。
+    - 脚本中的 `ANIMATION_WAIT` 参数（当前为0.8秒）是为了平衡UI动画响应与执行效率。在系统负载极高或浏览器响应迟缓的情况下，这个延迟可能不够长，从而导致“抢跑”或“双击”等问题。
     - **建议**: 如果频繁遇到此类问题，可以尝试在源代码中适当增加 `ANIMATION_WAIT` 的值（如`0.15`或`0.2`）。
 
 5.  **截图模板覆盖范围有限**:
